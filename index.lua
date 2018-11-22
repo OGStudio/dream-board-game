@@ -1,35 +1,45 @@
--- Shortcuts to system instances.
-local camera = main.application.camera
+
+-- Define an instance of a background color toggler.
+local colorToggler = {
+    -- Reference system camera instance.
+    camera = main.application.camera,
+
+    -- Background colors to toggle between.
+    colors = {
+        {0, 1, 0},
+        {1, 0, 0},
+    },
+    -- Track toggled state.
+    isToggled = true,
+    -- Function to reset color.
+    reset = function(self)
+        self.camera.clearColor = self.colors[1]
+    end,
+    -- Function to toggle color.
+    toggle = function(self)
+        -- Toggle.
+        self.isToggled = not self.isToggled
+        -- Apply.
+        if self.isToggled
+        then
+            self.camera.clearColor = self.colors[1]
+        else
+            self.camera.clearColor = self.colors[2]
+        end
+    end,
+}
+
+-- Reset color.
+colorToggler:reset()
+
 local mouse = main.application.mouse
-
--- Background colors to toggle between.
-local bgColor0 = {0, 1, 0}
-local bgColor1 = {1, 0, 0}
-
--- Set initial color.
-camera.clearColor = bgColor0
--- Track color state.
-local isBGColor0 = true
-
--- Function to toggle color.
-local function toggleBGColor()
-    isBGColor0 = not isBGColor0
-    -- Apply.
-    if isBGColor0
-    then
-        camera.clearColor = bgColor0
-    else
-        camera.clearColor = bgColor1
-    end
-end
-
 -- Toggle color upon mouse click.
 mouse.pressedButtonsChanged:addCallback(
     function()
         -- Detect click.
         if (#mouse.pressedButtons > 0)
         then
-            toggleBGColor()
+            colorToggler:toggle()
         end
     end
 )
