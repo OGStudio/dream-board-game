@@ -1,23 +1,25 @@
--- Define local shortcuts to system instances.
+-- Shortcuts to system instances.
 local camera = main.application.camera
 local mouse = main.application.mouse
 
--- Set background color to green initially.
-camera.clearColor = {0, 1, 0}
+-- Background colors to toggle between.
+local bgColor0 = {0, 1, 0}
+local bgColor1 = {1, 0, 0}
 
--- Track current color.
-local colorIsGreen = true
+-- Set initial color.
+camera.clearColor = bgColor0
+-- Track color state.
+local isBGColor0 = true
 
--- Define function to toggle background color between green and red.
-local function toggleColor()
-    -- Toggle.
-    colorIsGreen = not colorIsGreen
+-- Function to toggle color.
+local function toggleBGColor()
+    isBGColor0 = not isBGColor0
     -- Apply.
-    if colorIsGreen
+    if isBGColor0
     then
-        camera.clearColor = {0, 1, 0}
+        camera.clearColor = bgColor0
     else
-        camera.clearColor = {1, 0, 0}
+        camera.clearColor = bgColor1
     end
 end
 
@@ -27,7 +29,7 @@ mouse.pressedButtonsChanged:addCallback(
         -- Detect click.
         if (#mouse.pressedButtons > 0)
         then
-            toggleColor()
+            toggleBGColor()
         end
     end
 )
